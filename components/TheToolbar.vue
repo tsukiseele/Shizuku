@@ -1,110 +1,88 @@
 <template>
-  <div
-    class="toolbar"
+  <nav
+    id="toolbar"
     :class="{
-      'toolbar-hide': scroll.change > 0,
-      'toolbar-bg': scroll.position > 100,
+      'toolbar-hide': scroll.pos > 100,
     }"
   >
-    <div class="toolbar--title">{{ title }}</div>
-    <div class="toolbar--spacer"></div>
-    <ul class="toolbar--menu">
+    <!-- 
+    // 仅滑到顶部时显示工具栏
+    :class="{
+      'toolbar-hide': scroll.pos > 100,
+    }"
+    // 上滑时显示工具栏
+    :class="{
+      'toolbar-hide': scroll.change > 0,
+      'toolbar-bg': scroll.pos > 100,
+    }" -->
+    <div class="toolbar-title" @click="$router.push('/')">{{ title }}</div>
+    <div class="toolbar-spacer"></div>
+    <ul class="toolbar-menu" :class="{ 'menu-dark': scroll.pos > 100 }">
       <li @click="$router.push('/')"><i class="fa fa-home"></i>主页</li>
       <li @click="$router.push('/timeline')"><i class="fa fa-list"></i>归档</li>
-      <li @click="$router.push('/friends')"><i class="fa fa-at"></i>关于</li>
+      <li @click="$router.push('/links')"><i class="fa fa-at"></i>友链</li>
+      <li @click="$router.push('/projects')">
+        <i class="fa fa-file-code-o"></i>项目
+      </li>
     </ul>
-    <div class="toolbar--spacer"></div>
-  </div>
+    <div class="toolbar-spacer"></div>
+  </nav>
 </template>
 
 <script>
 export default {
   data: () => ({
     title: "雫『Shizuku』",
-    scroll: {
-      // timer: null,
-      position: 0,
-      // endPos: 0,
-      change: 0,
-    },
   }),
-  methods: {
-    handleScroll() {
-      let currentPos =
-        window.pageYOffset ||
-        document.documentElement.scrollTop ||
-        document.body.scrollTop;
-      this.scroll.change = currentPos - this.scroll.position;
-      this.scroll.position = currentPos;
-      // startPos == 0 标志着滚动开始
-      /*
-      if (this.scroll.startPos == 0) {
-        this.scroll.startPos =
-          window.pageYOffset ||
-          document.documentElement.scrollTop ||
-          document.body.scrollTop;
-      }
-      // 函数防抖
-      if (this.scroll.timer) {
-        clearTimeout(this.scroll.timer);
-      }
-      // 100ms后判定滚动结束
-      this.scroll.timer = setTimeout(() => {
-        this.scroll.endPos =
-          window.pageYOffset ||
-          document.documentElement.scrollTop ||
-          document.body.scrollTop;
-        // 执行动作
-        this.scroll.change = this.scroll.endPos - this.scroll.startPos
-        // 滚动动作结束，将startPos重置
-        this.scroll.startPos = 0;
-      }, 100);
-      */
+  computed: {
+    scroll() {
+      return this.$store.getters.scroll;
     },
-  },
-  mounted() {
-    window.addEventListener("scroll", this.handleScroll);
   },
 };
 </script>
 <style lang="scss">
-.toolbar {
+#toolbar {
   position: fixed;
   top: 0;
   display: flex;
   align-items: center;
-  color: aliceblue;
+  color: var(--text);
   width: 100%;
   height: 4rem;
   padding: 0 2rem;
   background: transparent;
   transition: all 0.3s linear;
+  z-index: 9;
   &.toolbar-hide {
     transform: translateY(-100%);
   }
   &.toolbar-bg {
-    background: rgba(255, 255, 255, 0.9);
     color: rgba(63, 63, 63, 1);
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 8px grey;
   }
 }
 
-.toolbar--title {
+.toolbar-title {
   font-size: 1.2rem;
+  font-family: InfoDisplay;
   font-weight: 500;
   padding-right: 2rem;
   cursor: pointer;
 }
 
-.toolbar--menu {
+.toolbar-menu {
   display: flex;
   justify-content: center;
   align-items: center;
   li {
+    line-height: 3rem;
     position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: 0.25rem;
+    border-radius: .33rem .33rem 0 0;
     padding: 0.25rem 1rem;
     height: 100%;
     cursor: pointer;
@@ -122,7 +100,7 @@ export default {
       bottom: 0;
       right: 0;
       width: 0;
-      border-bottom: skyblue solid 2px;
+      border-bottom: var(--theme-primary) solid 2px;
       transition: width 0.2s ease-in-out;
     }
     i {
@@ -130,9 +108,23 @@ export default {
       font-size: 1.1rem;
     }
   }
+  &.menu-dark li {
+    &:hover {
+      background: var(--theme-primary);
+    }
+    &::after {
+      border-bottom: var(--black) solid 2px;
+    }
+  }
 }
 
-.toolbar--spacer {
+.toolbar-spacer {
   flex-grow: 1;
+}
+
+@media screen and (max-width: 768px) {
+  .toolbar-title {
+    display: none;
+  }
 }
 </style>

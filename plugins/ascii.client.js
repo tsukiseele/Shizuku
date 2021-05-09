@@ -32,9 +32,11 @@ export default () => {
   
                         https://github.com/tsukiseele/shizuku`
   console.log(ascii, 
-    "color: #86B6D8", 
-    "color: #86B6D8", 
+    "color: #5692ab", 
+    "color: #5692ab", 
     "color: black", 
-    "color: skyblue", 
+    "color: #77428D", 
     "color: black");
+    // --primary: rgba(139, 207, 222, 1);
+    // --primary-dark: rgba(49, 98, 135, 1);
 }

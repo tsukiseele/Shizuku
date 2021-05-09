@@ -3,16 +3,19 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "nuxt",
+    "dev": "cross-env NODE_ENV=development BASE_URL=http://localhost nuxt",
     "build": "nuxt build",
-    "start": "nuxt start",
+    "start": "cross-env NODE_ENV=production BASE_URL=https://www.tsukiseele.com nuxt start ",
     "generate": "nuxt generate"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.12.5",
+    "@nuxtjs/proxy": "^2.1.0",
     "aos": "^2.3.4",
+    "blueimp-md5": "^2.18.0",
     "core-js": "^3.8.2",
     "js-cookie": "^2.2.1",
+    "mavon-editor": "^2.9.1",
     "node-sass": "^5.0.0",
     "nuxt": "^2.14.12",
     "pug": "^3.0.0",
@@ -21,6 +24,7 @@
     "vuex-persistedstate": "^4.0.0-beta.3"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "pug-plain-loader": "^1.1.0"
   }
 }

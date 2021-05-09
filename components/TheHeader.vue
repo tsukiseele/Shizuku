@@ -1,117 +1,152 @@
-<template>
-  <div class="header">
-    <div class="header--card">
-      <div class="header--title">
-        <span>{{ title }}</span>
-      </div>
-      <div class="header--subtitle">
-        <span>{{ subtitleTyping.text }}</span>
-        <span
-          :class="{ 'subtitle--cursor-vague': subtitleTyping.vague }"
-          class="subtitle--cursor"
-        ></span>
-      </div>
-    </div>
-  </div>
-</template>
+<template lang="pug">
+header#header(ref="header", :class="{ full: isFull, hide: isHide }")
+  .header--card(v-show="!isHide")
+    .header--title(@click="scrollToContent()")
+      span {{ title }}
+    .header--subtitle(v-if="!hideSubtitle")
+      span {{ input.show }}
+      span.subtitle--cursor(:class="{ 'subtitle--cursor-vague': input.vague }")
+  .btn-scroll(v-show="!isHide")
+    i.fa.fa-chevron-down.fa-lg(@click="scrollToContent()")
+</template>>
+
 
 <script>
 export default {
+  props: {
+    title: {
+      type: String,
+      default: "",
+    },
+    subtitle: {
+      type: String,
+      default: "",
+    },
+    hideSubtitle: {
+      type: Boolean,
+      default: false,
+    },
+    isFull: {
+      type: Boolean,
+      default: false,
+    },
+    isHide: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data: () => ({
-    title: "雫『Shizuku』",
-    subtitle: [
-      "这里是tsukiseele的博客"
-      /*
-      "明日から、幸せな人になろう。",
-      "馬を飼って、薪を割って、世界を旅して。",
-      "明日から、食糧と野菜に気を使ってみよう。",
-      "私の家は、春に花咲く、この海辺に。",
-      "明日から、親しい人には手紙を書いて、",
-      "彼らに私の幸福を教えてあげよう。",
-      "あの稲妻のような幸福が、教えてくれたことを、",
-      "全ての人に教えて、",
-      "全ての川と山に、一つずつ暖かい名を付けて。",
-      "見知らぬ人、私はあなたのためにも祝福しよう。",
-      "あなたに素晴らしい未来があることを、",
-      "あなたとあなたの恋人が結ばれることを、",
-      "あなたがこの平凡な世界で幸せになる事を、願って。",
-      "そして私はただ、春に花咲く、この海辺に。",*/
-    ],
-    subtitleTyping: {
-      text: "",
-      index: 0, // 数组索引
+    input: {
+      template: [
+        /*
+        "明日から、幸せな人になろう。",
+        "馬を飼って、薪を割って、世界を旅して。",
+        "明日から、食糧と野菜に気を使ってみよう。",
+        "私の家は、春に花咲く、この海辺に。",
+        "明日から、親しい人には手紙を書いて、",
+        "彼らに私の幸福を教えてあげよう。",
+        "あの稲妻のような幸福が、教えてくれたことを、",
+        "全ての人に教えて、",
+        "全ての川と山に、一つずつ暖かい名を付けて。",
+        "見知らぬ人、私はあなたのためにも祝福しよう。",
+        "あなたに素晴らしい未来があることを、",
+        "あなたとあなたの恋人が結ばれることを、",
+        "あなたがこの平凡な世界で幸せになる事を、願って。",
+        "そして私はただ、春に花咲く、この海辺に。",*/
+      ],
+      show: "", // 当前行内容
+      index: 0, // 行索引
       state: true,
-      vague: false,
+      vague: true,
     },
   }),
   methods: {
+    scrollToContent() {
+      this.$nextTick(() => {
+        const ele = document.getElementById("container");
+        this.$store.commit("scroll", {
+          pos: ele.offsetTop,
+          change: ele.offsetTop,
+        });
+        ele.scrollIntoView();
+      });
+    },
     typing() {
       var sleep = 0;
       // 输入时，去除光标闪烁
-      if (this.subtitleTyping.vague) this.subtitleTyping.vague = false;
-      // 输入中
-      if (this.subtitleTyping.state) {
-        this.subtitleTyping.text = this.subtitle[
-          this.subtitleTyping.index
-        ].slice(0, this.subtitleTyping.text.length + 1);
+      if (this.input.vague) this.input.vague = false;
+      // 开始输入
+      let currentLine = this.input.template[this.input.index];
+      if (this.input.state) {
+        this.input.show = currentLine.substring(0, this.input.show.length + 1);
         sleep = 180;
-        // 删除中
+        // 删除
       } else {
-        this.subtitleTyping.text = this.subtitle[
-          this.subtitleTyping.index
-        ].slice(0, this.subtitleTyping.text.length - 1);
+        this.input.show = currentLine.substring(0, this.input.show.length - 1);
         sleep = 50;
       }
-      // 输入前后调用
+      // 输入前后调用,反转状态
       if (
-        this.subtitleTyping.text.length == 0 ||
-        this.subtitleTyping.text.length ==
-          this.subtitle[this.subtitleTyping.index].length
+        this.input.show.length == 0 ||
+        this.input.show.length == currentLine.length
       ) {
-        this.subtitleTyping.state = !this.subtitleTyping.state;
+        this.input.state = !this.input.state;
       }
       // 开始输入前调用
-      if (this.subtitleTyping.text.length == 0) {
-        this.subtitleTyping.index =
-          ++this.subtitleTyping.index < this.subtitle.length
-            ? this.subtitleTyping.index
+      if (this.input.show.length == 0) {
+        this.input.index =
+          ++this.input.index < this.input.template.length
+            ? this.input.index
             : 0;
-        sleep = 500;
+        this.input.vague = true;
+        sleep = 666;
       }
       // 输入完毕后调用
-      if (
-        this.subtitleTyping.text.length ==
-        this.subtitle[this.subtitleTyping.index].length
-      ) {
-        this.subtitleTyping.vague = true;
+      if (this.input.show.length == currentLine.length) {
+        this.input.vague = true;
         sleep = 2000;
       }
       setTimeout(this.typing, sleep);
     },
     async getHitokoto() {
-      let hitokoto = await this.$axios.$get('https://v1.hitokoto.cn/');
+      let hitokoto = await this.$axios.$get("https://v1.hitokoto.cn/");
       if (hitokoto) {
-        console.log(hitokoto);
-        this.subtitle.unshift(`出自 ${hitokoto.from}`);
-        this.subtitle.unshift(hitokoto.hitokoto);
+        this.input.template = [
+          `${hitokoto.hitokoto}`,
+          `出自 ${hitokoto.from}`,
+        ].concat(this.input.template);
       }
-    }
+      this.typing();
+    },
   },
   mounted() {
-    this.getHitokoto();
-    this.typing();
+    if (!this.hideSubtitle) {
+      if (this.subtitle && this.subtitle != "") {
+        this.input.template = this.subtitle;
+        this.typing();
+      } else {
+        this.getHitokoto();
+      }
+    }
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.header {
+#header {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 50vh;
   width: 100%;
-  background: rgba(0, 0, 0, 0.7);
+  background: var(--header);
+  &.full {
+    height: 100vh;
+  }
+  &.hide {
+    height: 4rem;
+  }
 }
 
 .header--card {
@@ -119,12 +154,20 @@ export default {
   justify-content: center;
   align-items: center;
   flex-flow: column;
-  color: white;
+  color: var(--white);
+  font-family: InfoDisplay;
 
   .header--title {
     font-size: 2.2rem;
     font-weight: 500;
     cursor: pointer;
+    color: var(--theme-primary);
+    span {
+      transition: color 0.3s ease;
+    }
+    :hover {
+      color: var(--white);
+    }
   }
 
   .header--subtitle {
@@ -141,8 +184,16 @@ export default {
     }
   }
 }
-
-.header--subtitle {
+.btn-scroll {
+  position: absolute;
+  display: block;
+  bottom: 0;
+  // background-color: #fff;
+  height: 50px;
+  width: 50px;
+  color: white;
+  cursor: pointer;
+  animation: float 3s linear infinite;
 }
 @keyframes cursor-vague {
   0% {
@@ -153,6 +204,20 @@ export default {
   }
   100% {
     opacity: 1;
+  }
+}
+@keyframes float {
+  0% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+  50% {
+    -webkit-transform: translateY(-6px);
+    transform: translateY(-10px);
+  }
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
   }
 }
 </style>

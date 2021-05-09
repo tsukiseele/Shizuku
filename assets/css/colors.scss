@@ -1,0 +1,58 @@
+:root {
+  /**
+     * Light Theme
+     */
+
+  --text: rgba(32, 32, 32, 1);
+  --text-primary: rgba(49, 98, 135, 1);/*rgba(139, 207, 222, 1);*/
+  --text-secondary: rgba(96, 96, 96, 1);
+  
+  --bg: rgba(255, 255, 255, .6);
+  --content-bg: rgba(255, 255, 255, .8);
+  --theme-primary: rgba(139, 207, 222, 1);
+  --theme-secondary: rgba(178, 143, 206, 1);
+  
+  --header: rgba(0, 0, 0, .3);
+  /*
+  --secondary: rgba(215, 171, 214, 1);
+  --secondary-dark: rgba(178, 143, 206, 1);
+  --secondary-text: rgba(55, 49, 57, 1);
+  --gray-light: #f7f7f7;
+  */
+  --shadow: rgba(0, 0, 0, .1);
+  --card: rgba(255, 255, 255, 1);
+  --text: rgba(0, 0, 0, 1);
+  --border: #dcdcdc;
+
+  --white: white;
+  --black: black;
+
+  /**
+     * Dark Theme
+     */
+  &[theme="dark"] {
+    --text: rgba(222, 222, 222, 1);
+    --text-primary: rgba(139, 207, 222, 1);
+    --text-secondary: rgba(190, 190, 190, 1);
+    --content-bg: rgba(32, 32, 32, 1);
+    --header: rgba(0, 0, 0, .5);
+    --bg: rgba(0, 0, 0, .6);
+    --shadow: rgba(32, 33, 36, .28);
+    --border: rgba(127, 127, 127, .6);
+    --card: rgba(0, 0, 0, 1);
+    --tags: rgba(64, 64, 64, 1);
+
+    /*
+    --primary: rgba(139, 207, 222, 1);
+    --primary-dark: rgba(49, 98, 135, 1);
+    --secondary: rgba(215, 171, 214, 1);
+    --secondary-dark: rgba(178, 143, 206, 1);
+    --primary-text: rgba(204, 205, 196, 1);
+    --secondary-text: rgba(200, 206, 198, 1);
+    */
+
+    img {
+      filter: brightness(.8);
+    }
+  }
+}

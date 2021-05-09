@@ -15,4 +15,10 @@ export default ({ app, $axios }, inject) => {
   inject("md5", Md5);
   // 占位符
   inject("placeholder", "data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=");
+  // 判断客户端类型
+  inject("mobile", function() {
+    
+    const width = document.documentElement.offsetWidth || document.body.offsetWidth;
+    return width < 768;
+  });
 }

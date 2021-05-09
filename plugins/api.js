@@ -1,5 +1,5 @@
 export default ({ app, $axios }, inject) => {
-  const api = {
+  inject("api", {
     // 登录
     async login(userEmail, userPassword) {
       return await $axios.$post(`/api/login`, { userEmail, userPassword });
@@ -23,9 +23,9 @@ export default ({ app, $axios }, inject) => {
     async getArticleById(id) {
       return await $axios.$get(`/api/article/${id}`);
     },
-    async getArchives() {
-      return await $axios.$get(`/api/article/archives`);
-    },
+    // async getArchives() {
+    //   return await $axios.$get(`/api/article/archives`);
+    // },
     // 评论
     async getCommentTree(articleId) {
       return await $axios.$get(`/api/comment/tree/${articleId}`);
@@ -57,6 +57,5 @@ export default ({ app, $axios }, inject) => {
         header: { "Content-Type": "multipart/form-data" }
       })
     }
-  }
-  inject("api", api);
+  });
 }
