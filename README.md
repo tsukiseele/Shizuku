@@ -1,5 +1,5 @@
 # Shizuku
-
+一个单页面博客应用
 ## Build Setup
 
 ```bash
