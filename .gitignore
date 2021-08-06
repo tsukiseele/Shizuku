@@ -91,3 +91,6 @@ sw.*
 
 #.zip
 /*.zip
+
+x.nuxt/
+yarn.lock
