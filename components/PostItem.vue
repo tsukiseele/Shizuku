@@ -1,7 +1,7 @@
 <template lang="pug">
 .post-item(@click="$router.push(to)")
   .item-cover-box
-    img.item-cover(:src="item.articleCover || placeholder")
+    img.item-cover(v-lazy="item.articleCover || placeholder")
   .item-info 
     .item-title {{ item.articleTitle }}
     span.item-preview {{ preview }}
@@ -49,14 +49,13 @@ export default {
       }
     },
   },
-  mounted() {
-    console.log(this.item);
-    console.log(this.tags);
-  },
 };
 </script>
 
 <style lang="scss" scoped>
+@media screen and(max-width: 768px) {
+
+}
 .post-item {
   position: relative;
   display: flex;
@@ -64,18 +63,23 @@ export default {
   padding: 0.5rem;
   margin: 1rem;
   background: var(--card);
+  transition: all .3s;
   box-shadow: 0 1px 6px var(--shadow);
   cursor: pointer;
   border-radius: 5px;
-  &:hover .item-cover {
-    filter: brightness(0.8);
-    transform: none;
+  backdrop-filter: blur(10px);
+  
+  &:hover {
+    background: var(--card-active);
+    .item-cover {
+      filter: brightness(0.8);
+      transform: none;
+    }
   }
   .item-cover-box {
-    width: 100%;
-    overflow: hidden;
-    height: 200px;
     flex: 0 0 250px;
+    height: 200px;
+    overflow: hidden;
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
   }
@@ -83,7 +87,6 @@ export default {
     height: 100%;
     width: 100%;
     object-fit: cover;
-    filter: brightness(0.6);
     transform: scale(1.2);
     transition: filter 0.6s, transform 0.6s;
   }
@@ -94,7 +97,7 @@ export default {
     color: var(--text);
     padding: 0 0 0 1rem;
     .item-title {
-      font-size: 1.25rem;
+      font-size: 1.4rem;
       font-weight: normal;
       color: var(--text);
       transition: color 0.3s;
@@ -170,22 +173,24 @@ export default {
   /** Mobile兼容 */
   @media (max-width: 768px) {
     /* A方案-下方显示*/
-    /*
     flex-direction: column;
     padding: 0rem;
     .item-cover-box {
-      height: 180px;
+      width: 100%;
+      flex: 0 0 220px;
       border-bottom-left-radius: 0;
       border-top-right-radius: 5px;
     }
+    
     .item-info {
-      padding: .25rem 1rem .5rem 1rem;
+      padding: .5rem 1rem .5rem 1rem;
     }
 
     .item-type {
       line-height: 2.2rem;
-    }*/
+    }
     /* B方案-遮罩层显示*/
+    /*
     flex-direction: column;
     padding: 0rem;
     height: 250px;
@@ -216,11 +221,11 @@ export default {
       filter: brightness(0.8);
     }
     .item-info {
-      padding: 0 .5rem .5rem .5rem;
+      padding: 0 0.5rem 0.5rem 0.5rem;
     }
     .item-type {
       line-height: 2.2rem;
-    }
+    }*/
   }
 }
 </style>

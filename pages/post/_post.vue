@@ -1,83 +1,53 @@
 <template lang="pug">
 #container
   main#main
+    .aside-wrap(
+      :class="{ down: !isMobile && scroll.change < 0 && scroll.pos > clientHeight }"
+    )
+      TheInfoCard(
+        :icon="res.icon",
+        :class="asideClasses",
+        :style="asideStyles"
+      )
+      TheArchives(:articles="articleArch")
     .post
       .error(v-if="error") {{ error }}
-      PostItem(
+      .post-item-wrap(
         v-for="(item, index) in articles",
-        :key="index",
-        :item="item",
-        :to="`/archives/${item.articleId}`",
-        :placeholder="placeholder",
-        :data-aos="index % 2 == 0 ? 'fade-left' : 'fade-right'",
-        data-aos-once="true"
+        @mouseenter="itemActive = item.articleTitle",
+        @mouseleave="itemActive = null"
       )
+        PostItem(
+          :key="index",
+          :item="item",
+          :to="`/archives/${item.articleId}`",
+          :placeholder="res.placeholder",
+          :data-aos="index % 2 == 0 ? 'fade-left' : 'fade-right'",
+          data-aos-once="true"
+        )
       .post-btn-next(
         v-if="page > 0",
         :class="{ 'post-btn-bottom': page < 0 }",
         @click="handleNextPage()"
       ) 
         span {{ page > 0 ? 'NEXT' : '已到底部' }}
-    .aside-wrap
-      TheAside(:icon="icon", :class="asideClasses", :style="asideStyles")
+    //- .aside-wrap
 </template>
 
 <script>
 export default {
   data: () => ({
-    icon: "https://cdn.jsdelivr.net/gh/tsukiseele/awsl.re/static/icon/icon.png",
-    placeholder:
-      "https://cdn.jsdelivr.net/gh/tsukiseele/awsl.re/static/icon/akarin.png",
     page: null,
     articles: null,
+    articleArch: null,
     error: null,
+    itemActive: null,
     // 侧栏
     asideStyles: {},
     asideClasses: {},
     asidePos: null,
   }),
   watch: {
-    /**
-     * 监听滚动事件,处理侧边栏的固定方式
-     */
-    scroll() {
-      if (process.client) {
-        const rem = parseInt(
-          window.getComputedStyle(document.documentElement)["fontSize"]
-        );
-        const aside = document.getElementById("aside");
-        const asideWrap = document.getElementsByClassName("aside-wrap")[0];
-        const container = document.getElementById("container");
-        if (aside) {
-          if (this.asidePos == null) {
-            this.asidePos = asideWrap.offsetTop - rem;
-            this.asideStyles.width = `${aside.offsetWidth}px`;
-            this.asideStyles.height = `${aside.offsetHeight}px`;
-          }
-          // 滚动到底部时固定在容器底部
-          if (
-            this.scroll.pos - this.asidePos + aside.offsetHeight + 2 * rem >
-            container.offsetHeight
-          ) {
-            this.asideStyles.top = `${
-              container.offsetHeight - aside.offsetHeight - 2 * rem
-            }px`;
-            return (this.asideClasses = {
-              bottom: true,
-            });
-          }
-          // 滚动超出屏幕时固定
-          if (this.scroll.pos > this.asidePos) {
-            this.asideStyles.top = null;
-            return (this.asideClasses = {
-              fixed: true,
-            });
-          }
-        }
-      }
-      // 清除状态
-      this.asideClasses = {};
-    },
     // 监听路由改变
     $route: {
       handler(to, from) {
@@ -107,12 +77,44 @@ export default {
       // 路由改变后立即执行
       immediate: true,
     },
+    itemActive(newVal, oldVal) {
+      if (newVal) {
+        this.$store.commit("live2dText", `要阅读『${newVal} 』吗?`);
+      }
+    },
   },
   computed: {
     scroll() {
       return this.$store.state.scroll;
     },
+    isMobile() {
+      return this.$store.getters.isMobile;
+    },
+    res() {
+      const icon = `${this.$static}/icon/icon.png`;
+      const placeholder = `${this.$static}/icon/akarin.png`;
+      return {
+        icon,
+        placeholder,
+      };
+    },
+    clientHeight() {
+      var clientHeight = 0;
+      if (document.body.clientHeight && document.documentElement.clientHeight) {
+        var clientHeight =
+          document.body.clientHeight < document.documentElement.clientHeight
+            ? document.body.clientHeight
+            : document.documentElement.clientHeight;
+      } else {
+        var clientHeight =
+          document.body.clientHeight > document.documentElement.clientHeight
+            ? document.body.clientHeight
+            : document.documentElement.clientHeight;
+      }
+      return clientHeight;
+    },
   },
+
   methods: {
     async handleNextPage() {
       if (this.page < 0) return;
@@ -128,10 +130,12 @@ export default {
   },
   async asyncData({ app, params }) {
     let articles = [];
+    let articleArch = [];
     let error = null;
     const page = params.post;
     try {
       articles = await app.$api.getArticlePage(page || 1, 6);
+      articleArch = await app.$api.getAllArticles();
     } catch (e) {
       error = "获取数据失败！";
       console.error(e);
@@ -139,49 +143,63 @@ export default {
     return {
       page,
       articles,
+      articleArch,
       error,
     };
   },
   fetch() {
     this.$store.commit("header", { title: "雫『Shizuku』", isFull: true });
   },
-  mounted() {
-    console.log(this.articles);
-  }
+  mounted() {},
 };
 </script>
 
 <style lang="scss" scoped>
+/**
+ * position: sticly 粘性布局在 flex box 内应用需要给
+ * 父元素设置 overflow: visible; 保证内容可滚动。
+ * 该元素设置 align-self: flex-start；使其高度变为 auto 。
+ * （由于flex box元素默认为stretch，因此所有元素都具有相同的高度，无法滚动。）
+ * 最后设置 top, right, bottom, left 其中之一才能正常工作。
+ */
+
+#main {
+  display: flex;
+  overflow: visible;
+}
 .aside-wrap {
-  display: none;
-  @media (min-width: 768px) {
-    display: block;
-    /** 此处调整侧边栏宽度，必须同时调整.post百分比保证总宽度为100%，否则可能发生错位以及意想不到的后果 */
-    width: 27%;
-    #aside {
-      &.fixed {
-        position: fixed;
-        top: 0;
-      }
-      &.bottom {
-        position: relative;
-        float: none;
-      }
-    }
+  position: sticky;
+  top: 0;
+  flex: 1;
+  align-self: flex-start;
+  padding: 1rem;
+  transition: padding 0.8s;
+  & > *:nth-child(2) {
+    margin-top: 1rem;
+  }
+  &.down {
+    padding-top: 4.5rem;
   }
 }
+@media (max-width: 768px) {
+  .aside-wrap {
+    position: static;
+  align-self: stretch;
+  }
 
+  #main {
+    flex-direction: column-reverse;
+  }
+
+  .post {
+    flex: 1;
+  }
+}
 .post {
-  width: 100%;
-  float: right;
+  flex: 3;
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
-  width: auto;
-
-  @media (min-width: 768px) {
-    width: 73%;
-  }
 }
 
 /** 下一页按钮样式 */
@@ -207,12 +225,13 @@ export default {
     left: 0;
     bottom: 0;
     right: 0;
-    background: var(--bg);
-
+    background: var(--background);
+    backdrop-filter: blur(10px);
     border: var(--theme-primary) solid 3px;
     transition: background 0.3s ease;
     z-index: -1;
   }
+
   &::after {
     content: "";
     display: block;
@@ -233,7 +252,7 @@ export default {
     &::before {
       background: var(--theme-primary);
     }
-    color: var(--white)hite;
+    color: var(--white);
   }
 }
 </style>

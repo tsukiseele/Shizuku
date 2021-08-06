@@ -87,20 +87,20 @@ export default {
 }
 
 .header {
-  background-color: var(--primary-dark);
+  background-color: var(--theme);
   line-height: 4rem;
   padding-left: 1rem;
-  box-shadow: 0 0 5px var(--primary-dark);
+  box-shadow: 0 0 5px var(--theme);
   z-index: 2;
   .header-icon {
     font-family: InfoDisplay;
     font-weight: bold;
     font-size: 1.5rem;
     padding: 0 0.33rem;
-    color: var(--primary);
+    color: var(--text);
   }
   .header-title {
-    color: var(--primary);
+    color: var(--text);
     font-size: 1.1rem;
   }
 }
@@ -110,7 +110,7 @@ export default {
     padding: 1rem;
     border-bottom: 1px solid var(--border);
     transition: filter 0.3s ease;
-    background: var(--gray-light);
+    background: var(--card);
     cursor: pointer;
     &:hover {
       filter: brightness(0.9);

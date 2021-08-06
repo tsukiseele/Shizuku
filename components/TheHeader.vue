@@ -1,9 +1,9 @@
 <template lang="pug">
-header#header(ref="header", :class="{ full: isFull, hide: isHide }")
+header#header(ref="header", :class="{ full: isFull, hide: isHide }", :style="{ '--hideTri': `${isFull ? 'block' : 'none'}` }")
   .header--card(v-show="!isHide")
     .header--title(@click="scrollToContent()")
       span {{ title }}
-    .header--subtitle(v-if="!hideSubtitle")
+    .header--subtitle(v-if="!isHideSubtitle")
       span {{ input.show }}
       span.subtitle--cursor(:class="{ 'subtitle--cursor-vague': input.vague }")
   .btn-scroll(v-show="!isHide")
@@ -22,7 +22,7 @@ export default {
       type: String,
       default: "",
     },
-    hideSubtitle: {
+    isHideSubtitle: {
       type: Boolean,
       default: false,
     },
@@ -119,6 +119,36 @@ export default {
       this.typing();
     },
   },
+  computed: {
+    clientHeight() {
+      /*
+      if(document) { 
+      if (!document || process.env.server) return 0;
+      var clientHeight = 0;
+      if (document.body.clientHeight && document.documentElement.clientHeight) {
+        var clientHeight =
+          document.body.clientHeight < document.documentElement.clientHeight
+            ? document.body.clientHeight
+            : document.documentElement.clientHeight;
+      } else {
+        var clientHeight =
+          document.body.clientHeight > document.documentElement.clientHeight
+            ? document.body.clientHeight
+            : document.documentElement.clientHeight;
+      }
+
+      return clientHeight;
+      } else {
+        return 0;
+      }*/
+    },
+    scroll() {
+      return this.$store.state.scroll;
+    },
+  },
+  watch: {
+    scroll() {},
+  },
   mounted() {
     if (!this.hideSubtitle) {
       if (this.subtitle && this.subtitle != "") {
@@ -141,39 +171,84 @@ export default {
   height: 50vh;
   width: 100%;
   background: var(--header);
+  overflow: hidden;
+
   &.full {
     height: 100vh;
   }
   &.hide {
     height: 4rem;
   }
+  @media screen and(max-width: 768px) {
+    height: 33vh;
+  }
+  /*
+  &::before,
+  &::after {
+    content: "";
+    display: var(--hideTri);
+    position: absolute;
+    width: 200vw;
+    height: 200vh;
+    backdrop-filter: blur(16px);
+  }
+  &::before {
+    transform: rotateZ(30deg) translate(0, -70%);
+  }
+  &::after {
+    transform: rotateZ(30deg) translate(0, 70%);
+  }
+  @media screen and(max-width: 768px) {
+    &::before {
+      transform: rotateZ(30deg) translate(0%, -60%);
+    }
+    &::after {
+      transform: rotateZ(30deg) translate(0%, 60%);
+    }
+  }*/
 }
+
+/*
+.header-triangles {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(10px);
+  &:nth-of-type(1) {
+    transform: rotateZ(30deg) translate(0%, 88%);
+  }
+  &:nth-of-type(2) {
+    transform: rotateZ(30deg) translate(0%, -88%);
+  }
+}*/
 
 .header--card {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-flow: column;
-  color: var(--white);
+  text-align: center;
+  color: var(--text);
   font-family: InfoDisplay;
 
   .header--title {
     font-size: 2.2rem;
     font-weight: 500;
     cursor: pointer;
-    color: var(--theme-primary);
+    color: var(--text-primary);
     span {
       transition: color 0.3s ease;
     }
     :hover {
-      color: var(--white);
+      color: var(--text);
     }
   }
 
   .header--subtitle {
     font-size: 1.4rem;
     cursor: pointer;
-
     .subtitle--cursor {
       height: 100%;
       border-left: white solid 1px;
@@ -181,6 +256,14 @@ export default {
     }
     .subtitle--cursor-vague {
       animation: cursor-vague 1s ease infinite;
+    }
+  }
+  @media screen and (max-width: 768px) {
+    .header--title {
+      font-size: 1.8rem;
+    }
+    .header--subtitle {
+      font-size: 1.2rem;
     }
   }
 }
@@ -194,7 +277,9 @@ export default {
   color: white;
   cursor: pointer;
   animation: float 3s linear infinite;
+  z-index: 1;
 }
+
 @keyframes cursor-vague {
   0% {
     opacity: 1;

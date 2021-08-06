@@ -2,7 +2,12 @@
 #container
   main#main
     .list 
-      .card(v-for="(link, index) in links", :key="index")
+      .card(
+        v-for="(link, index) in links",
+        :key="index",
+        data-aos="flip-left",
+        data-aos-once="true"
+      )
         img.link-icon(:src="link.linkIcon")
         .link-wrap 
           .link-name.single-line {{ link.linkName }}
@@ -46,11 +51,16 @@ export default {
   margin: 0.5rem;
   width: calc(100% / 3 - 1rem);
   background: var(--card);
+  transition: all 0.3s;
   border-radius: 5px;
   box-shadow: 0 0 9px var(--shadow);
   max-height: 200px;
   overflow: hidden;
   padding: 1rem;
+  cursor: pointer;
+  &:hover {
+    background: var(--card);
+  }
   .link-icon {
     height: 64px;
     width: 64px;
@@ -81,7 +91,8 @@ export default {
 }
 @media screen and (max-width: 1024px) {
   .card {
-    width: calc(100% / 2 - 1rem);
+    // width: calc(100% / 2 - 1rem);
+    width: 100%;
   }
 }
 </style>

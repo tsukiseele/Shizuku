@@ -1,5 +1,6 @@
 export const state = () => ({
   user: null,
+  clientWidth: 0,
   live2dText: "",
   scroll: {
     pos: 0,
@@ -8,6 +9,7 @@ export const state = () => ({
   header: {
     title: "",
     subtitle: "",
+    isHideSubtitle: false,
     isFull: false,
     isHide: false,
   }
@@ -25,6 +27,12 @@ export const getters = {
   },
   header(state) {
     return state.header;
+  },
+  clientWidth(state) {
+    return state.clientWidth;
+  },
+  isMobile(state) {
+    return state.clientWidth < 768;
   }
 }
 
@@ -40,5 +48,8 @@ export const mutations = {
   },
   header(state, header) {
     state.header = header;
+  },
+  clientWidth(state, clientWidth) {
+    state.clientWidth = clientWidth
   }
 }

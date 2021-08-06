@@ -4,7 +4,8 @@
     defaultOpen="preview"
     :toolbarsFlag="false" 
     :subfield="false" 
-    v-model="value">
+    v-model="value"
+    codeStyle="atom-one-dark">
   </mavon-editor>
 </template>
 

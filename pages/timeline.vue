@@ -61,20 +61,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/*
 #container {
   margin: 0 auto;
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-}
+}*/
 
 #main {
-  background-color: var(--content-bg);
+  margin: 1rem auto;
+  background: var(--card);
+  border-radius: .5rem;
+  
 }
 
 .timeline {
   padding: 2rem;
+  transition: .3s;
 
   .timeline-group {
     padding: .33rem 0;
@@ -91,7 +96,7 @@ export default {
     transition: background .3s ease;
     
     &:hover {
-      background: var(--card);
+      background: var(--card-active);
       .timeline-item-title {
         padding-left: 1rem;
       }
@@ -107,7 +112,7 @@ export default {
   }
 
   .timeline-item-tags {
-    background-color: var(--tags);
+    // border: 1px solid var(--theme-primary);
     border-radius: 3px;
     color: var(--text);
     font-weight: 300;

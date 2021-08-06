@@ -30,6 +30,13 @@ export default ({ app, $axios }, inject) => {
     async getCommentTree(articleId) {
       return await $axios.$get(`/api/comment/tree/${articleId}`);
     },
+    async addComment(comment) {
+      return await $axios.$put(`/api/comment`, comment);
+    },
+    // 访客
+    async addVisitor(visitor) {
+      return await $axios.$put(`/api/visitor`, visitor);
+    },
     // 链接
     async getAllLink() {
       return await $axios.$get(`/api/link`);

@@ -2,15 +2,25 @@
 #container
   main#main
     .article
-      .banner
-        img.bg(v-if="article.articleCover", :src="article.articleCover") 
-        .header
-          .title(v-text="article.articleTitle")
-          ul.tags
-            Button.tag(v-for="(tag, i) in tags", :key="i") {{ tag }}
-      .markdown
+      //- .banner
+      //-   img.bg(v-if="article.articleCover", :src="article.articleCover") 
+      //-   .header
+      //-     .title(v-text="article.articleTitle")
+      //-     ul.tags
+      //-       .tag(v-for="(tag, i) in tags", :key="i") 
+      //-         i.tag-icon.fa.fa-tags
+      //-         span.tag-text {{ tag }}
+      .markdown.card
         MarkdownPreview(v-model="article.articleContent")
-      Comment(:comments="comments")
+      .comments.card
+        .comment-header {{ comments.length == 0 ? '暂无评论' : '评论' }}
+        .comment-edit
+          .comment-content
+          .comment-username
+          .comment-email
+          .comment-domain
+            
+        Comment(:comments="comments" :reply="handleReply()")
 </template>
 
 <script>
@@ -26,9 +36,15 @@ export default {
   }),
   fetch() {
     this.$store.commit("header", {
-      // title: this.article.articleTitle || "无题",
-      isHide: true,
+      title: this.article.articleTitle || "无题",
+      isHideSubtitle: true,
+      // isHide: true,
     });
+  },
+  methods: {
+    handleReply() {
+      
+    }
   },
   async asyncData({ app, params }) {
     let id = params.id || 0;
@@ -56,13 +72,30 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#container {
+@media screen and(max-width: 768px) {
+  .markdown, .comments {
+    border-radius: 0;
+  }
 }
-
 #main {
+  padding: 2rem 0;
 }
 
 .article {
+}
+
+.markdown {
+  overflow: hidden;
+}
+
+.comments {
+  overflow: hidden;
+  margin-top: 2rem;
+  padding: 2rem;
+  .comment-header {
+    color: var(--text);
+    font-size: 1.4rem;
+  }
 }
 
 .banner {
@@ -93,33 +126,35 @@ export default {
   .header {
     z-index: 1;
     .title {
-      color: var(--text-primary);
-      font-size: 2rem;
+      color: var(--text);
+      font-size: 2.4rem;
       font-family: InfoDisplay;
-      text-shadow: 0 1px 6px var(--text-primary);
+      line-height: 2.5rem;
     }
     .tags {
       list-style: none;
-      /*
+      display: flex;
+      align-items: center;
+      justify-content: center;
       .tag {
         display: inline-block;
-        color: var(--text-primary);
-        font-size: 0.8rem;
-        line-height: 1.5rem;
-        padding: 0 1rem;
-        margin: 0.5rem 0.1rem;
-        border: gainsboro solid thin;
-        border-radius: 1rem;
-        transition: background 0.3s ease;
+        text-align: center;
+        color: var(--text);
+        padding: 0.1rem 0.3rem;
+        transition: color 0.3s ease;
         cursor: pointer;
+        font-size: 0.9rem;
         &:hover {
-          background: gainsboro;
+          color: var(--text-primary);
         }
-      }*/
+        .tag-icon {
+        }
+        .tag-text {
+          font-family: InfoDisplay;
+          padding-left: 0.2rem;
+        }
+      }
     }
   }
-}
-.markdown {
-  filter: invert(100%);
 }
 </style>

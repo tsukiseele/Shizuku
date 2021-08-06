@@ -2,13 +2,21 @@
 .comment-wrap
   .comment(v-for="(item, index) in comments", :key="index")
     .comment-body
-      .comment-avater {{ item.visitor.visitorIcon}}
-      .comment-username {{ item.visitor.visitorName }}
-      .comment-date {{ item.comment.commentDatetime }}
-      .comment-content {{ item.comment.commentContent }}
-      input.comment-btn-reply
+      img.comment-avater(:src="item.visitor.visitorIcon || res.akarin")
+      .comment-info
+        .comment-username {{ item.visitor.visitorName }}
+          span.comment-date {{ item.comment.commentDatetime | formatDate('yyyy-MM-dd hh:mm') }}
+          input.comment-btn-reply(type="button", value="回复")
+        .comment-content 
+          span.comment-at(v-if="at && at !== item.visitor.visitorName") @{{ at }}
+          span {{ item.comment.commentContent }}
     .comment-reply(v-if="item.childs", :class="{ child: isIndent(99) }")
-      Comment(:deep="deep + 1", :comments="item.childs", :reply="reply")
+      Comment(
+        :deep="deep + 1",
+        :comments="item.childs",
+        :reply="reply",
+        :at="item.visitor.visitorName"
+      )
 </template>
 
 <script>
@@ -16,6 +24,7 @@ export default {
   name: "Comment",
   props: {
     comments: Array,
+    at: String,
     reply: Function,
     deep: {
       type: Number,
@@ -24,8 +33,16 @@ export default {
   },
   data: () => ({
     hover: false,
-    defaultIcon: "https://cdn.jsdelivr.net/gh/tsukiseele/awsl.re/static/icon/akarin.png",
+    defaultIcon:
+      "https://cdn.jsdelivr.net/gh/tsukiseele/awsl.re/static/icon/akarin.png",
   }),
+  computed: {
+    res() {
+      return {
+        akarin: `${this.$static}/icon/akarin.png`,
+      };
+    },
+  },
   methods: {
     isIndent(deep) {
       /*
@@ -43,73 +60,81 @@ export default {
   },
   mounted() {
     console.log(this.comments);
-  }
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-.comment-wrap {
-
+.comment-reply {
+  padding-left: 3rem;
+  @media screen and(max-width: 768px) {
+    padding-left: 0;
+    .comment-body {
+      padding-left: 2rem;
+    }
+  }
+  /*
+  .comment-body {
+    &::before {
+      content: "";
+      position: absolute;
+      height: 100%;
+      // border-left: 0.33rem ridge var(--theme-primary);
+    }
+  }*/
 }
 .comment {
-  padding-left: 1rem;
-  border-radius: 5px;
-  border: 1px solid var(--border);
+  padding-top: 1rem;
+  font-family: InfoDisplay;
 
   .comment-body {
+    position: relative;
+    display: flex;
+    // border-bottom: 0.1rem dotted var(--theme-primary);
 
-  }
-}
-/*
-.v-card {
-  box-shadow: none !important;
+    .comment-avater {
+      object-fit: cover;
+      margin-left: 1rem;
+      width: 64px;
+      height: 64px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+    }
 
-  &:hover {
-    box-shadow: none !important;
-  }
-}
+    .comment-info {
+      display: flex;
+      flex-direction: column;
+      padding-left: 0.33rem;
 
-.visitor-info {
-  cursor: pointer;
-}
-
-.visitor-nickname {
-  position: relative;
-  color: teal;
-  margin: 0 5px;
-
-  &::before {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 0;
-    border-bottom: 1px solid teal;
-    transition: 0.3s;
-  }
-}
-.visitor-icon {
-  vertical-align: middle;
-}
-
-.visitor-icon {
-  transition: 0.3s ease;
-  border: 1px solid teal;
-}
-
-.content:hover {
-  .visitor-icon {
-    transform: rotateZ(360deg);
-  }
-
-  .visitor-nickname {
-    &::before {
-      width: 100%;
-      left: 0;
+      .comment-username {
+        color: var(--text-secondary);
+      }
+      .comment-date {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        padding-left: 0.33rem;
+      }
+      .comment-at {
+        color: var(--text-primary);
+        padding-right: 0.33rem;
+   
+      }
+      .comment-btn-reply {
+        color: var(--text-primary);
+        font-size: .9rem;
+        padding: 0 .2rem;
+        margin-left: .33rem;
+        &:hover {
+          background: var(--theme-primary);
+          color: var(--text);
+        }
+      }
+      .comment-content {
+        color: var(--text);
+      }
     }
   }
 }
-
 .btn-reply {
   // background-color #ccc
   border-radius: 10%;
@@ -119,5 +144,5 @@ export default {
     background-color: teal;
     color: white;
   }
-}*/
+}
 </style>

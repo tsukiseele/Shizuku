@@ -40,7 +40,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.card {
-  font-family: InfoDisplay;
-}
 </style>

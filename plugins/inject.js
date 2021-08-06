@@ -1,7 +1,11 @@
 import Cookie from 'js-cookie'
 import Md5 from 'blueimp-md5'
 
-export default ({ app, $axios }, inject) => {
+export default ({
+  app
+}, inject) => {
+  // 静态资源位置
+  inject("static", "https://cdn.jsdelivr.net/gh/tsukiseele/awsl.re/static")
   // 获取服务端cookie
   inject("getCookiesInServer", function (req) {
     let service_cookie = {};
@@ -16,9 +20,12 @@ export default ({ app, $axios }, inject) => {
   // 占位符
   inject("placeholder", "data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=");
   // 判断客户端类型
-  inject("mobile", function() {
-    
-    const width = document.documentElement.offsetWidth || document.body.offsetWidth;
-    return width < 768;
+  inject("mobile", function () {
+    if (process.env.client) {
+      const width = document.documentElement.offsetWidth || document.body.offsetWidth;
+
+      return width < 768;
+    }
+    return false;
   });
 }

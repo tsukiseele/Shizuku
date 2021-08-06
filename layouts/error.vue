@@ -21,6 +21,7 @@
 
 <script>
 export default {
+  layout: 'blank',
   name: 'NuxtError',
   props: {
     error: {

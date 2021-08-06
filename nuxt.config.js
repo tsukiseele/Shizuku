@@ -10,7 +10,7 @@ export default {
       },
       {
         name: 'viewport',
-        content: 'width=device-width, initial-scale=1'
+        content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'
       },
       {
         hid: 'description',
@@ -46,8 +46,9 @@ export default {
   css: [
     "ress",
     "~/assets/css/styles.scss",
-    "~/assets/css/colors.scss",
     "~/assets/css/transitions.scss",
+    "~/assets/css/theme/light.scss",
+    "~/assets/css/theme/dark.scss",
   ],
 
   // Plugins to run before rendering pasge: https://go.nuxtjs.dev/config-plugins
@@ -60,6 +61,9 @@ export default {
     '~/plugins/lib-aos.client.js',
     '~/plugins/lib-vuex-persistedstate.client.js',
     '~/plugins/lib-mavon-editor.client.js',
+    '~/plugins/lib-vue-lazyload.client.js',
+    '~/plugins/lib-live2d.client.js',
+    '~/plugins/lib-aplayer.client.js',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

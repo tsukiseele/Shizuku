@@ -2,7 +2,7 @@
 #footer
   .footer-wrap
     .footer-info
-      p © 2021 by 
+      p © {{ new Date().getFullYear() }} by 
         a.info--developer(href="https://github.com/tsukiseele" target="_blank") TsukiSeele 
         | All Rights Reserved.
       p Powered by 
@@ -23,8 +23,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import url("@/assets/css/colors.scss");
-
 #footer {
   display: flex;
   justify-content: center;
@@ -52,7 +50,7 @@ export default {
 }
 
 .info--theme {
-  color: var(--primary);
+  color: rgba(139, 207, 222, 1);
 }
 
 .info--spacer {

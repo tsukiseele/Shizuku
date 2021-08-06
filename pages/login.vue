@@ -38,21 +38,23 @@ export default {
   },*/
   data: () => ({
     icon: {
-      current: "https://cdn.jsdelivr.net/gh/tsukiseele/awsl.re/static/icon/login_icon.png",
+      current:
+        "https://cdn.jsdelivr.net/gh/tsukiseele/awsl.re/static/icon/login_icon.png",
       ok:
         "https://cdn.jsdelivr.net/gh/tsukiseele/awsl.re/static/icon/login_icon.png",
-      failed: "https://cdn.jsdelivr.net/gh/tsukiseele/awsl.re/static/icon/login_icon.png.png",
+      failed:
+        "https://cdn.jsdelivr.net/gh/tsukiseele/awsl.re/static/icon/login_icon.png"
     },
     dialog: true,
     error: {
       show: false,
       message: "",
-      color: "",
+      color: ""
     },
     user: {
       email: "",
-      password: "",
-    },
+      password: ""
+    }
   }),
   methods: {
     async handleSubmit() {
@@ -93,11 +95,11 @@ export default {
           }
         } catch (e) {}
       }
-    },
+    }
   },
   mounted() {
     this.checkLogin();
-  },
+  }
 };
 </script>
 
@@ -150,7 +152,7 @@ export default {
     font-family: InfoDisplay;
     &[type="button"] {
       flex-grow: 1;
-      font-size: .9rem;
+      font-size: 0.9rem;
     }
   }
 }
@@ -160,6 +162,6 @@ export default {
   margin-top: 1rem;
 }
 .error {
-  font-size: .9rem;
+  font-size: 0.9rem;
 }
 </style>
