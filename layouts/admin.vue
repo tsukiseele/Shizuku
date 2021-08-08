@@ -6,7 +6,7 @@
   #root
     aside#aside
       ul.menu
-        ol.menu-item(
+        ol.menu-item(   
           v-for="(item, index) in menu",
           :key="index",
           @click="handleItemClick(item)"
@@ -25,40 +25,40 @@ export default {
       {
         title: "仪表盘",
         icon: "fa-dashboard",
-        to: "/admin",
+        to: "/admin"
       },
       {
         title: "新想法",
         icon: "fa-pencil",
-        to: "/admin/edit",
+        to: "/admin/edit"
       },
       {
         title: "文章管理",
         icon: "fa-file-text-o",
-        to: "/admin/manager",
+        to: "/admin/manager"
       },
       {
         title: "评论管理",
         icon: "fa-comment-o",
-        to: "/admin/comment",
+        to: "/admin/comment"
       },
       {
         title: "友链管理",
         icon: "fa-at",
-        to: "/admin/link",
+        to: "/admin/link"
       },
       {
         title: "返回主页",
         icon: "fa-reply",
-        to: "/",
-      },
-    ],
+        to: "/"
+      }
+    ]
   }),
   methods: {
     handleItemClick(item) {
       this.$router.push(item.to);
-    },
-  },
+    }
+  }
 };
 </script>
 

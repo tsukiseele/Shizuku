@@ -25,7 +25,8 @@
       i.fa.fa-bars
   .nav-drawer(v-if="isMobile" :class="{ open: drawer }")
     .drawer-blank(@click="drawer = !drawer")
-    .drawer-box
+    .drawer-main
+      .drawer-banner 
       ul.drawer-menu(@click="drawer = !drawer")
         li(@click="$router.push('/')")
           i.fa.fa-home 
@@ -41,12 +42,11 @@
           | 关于我
 </template>
 
-
 <script>
 export default {
   data: () => ({
     title: "雫『Shizuku』",
-    drawer: false,
+    drawer: false
   }),
   computed: {
     scroll() {
@@ -54,8 +54,8 @@ export default {
     },
     isMobile() {
       return this.$store.getters.isMobile;
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="scss">
@@ -73,6 +73,7 @@ export default {
   transition: all 0.3s linear;
   z-index: 9;
   line-height: 3rem;
+  align-items: center;
 
   &:hover {
     background: var(--background);
@@ -95,7 +96,7 @@ export default {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  transition: background .3s ease;
+  transition: background 0.3s ease;
   i {
     align-self: center;
     font-size: 1.3rem;
@@ -108,7 +109,7 @@ export default {
 }
 
 .nav-drawer {
-  .drawer-box {
+  .drawer-main {
     position: fixed;
     right: -60%;
     width: 60%;
@@ -116,6 +117,32 @@ export default {
     transition: right 0.3s ease;
     background-color: var(--card);
     z-index: 100;
+  }
+
+  .drawer-banner {
+    height: 10rem;
+    background-image: url(https://cdn.jsdelivr.net/gh/tsukiseele/ImageHosting/upload/826f66f94e3ebf1f62cff7c9109bb118.jpeg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .drawer-menu {
+    color: var(--text);
+
+    li {
+      i {
+        padding-right: 0.5rem;
+      }
+      cursor: pointer;
+      padding: 0.5rem 1rem;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background-color: var(--theme-primary);
+        filter: brightness(1.2);
+      }
+    }
   }
   .drawer-blank {
     position: fixed;
@@ -127,14 +154,15 @@ export default {
     z-index: 99;
     transition: background 0.3s ease;
   }
+
   &.open {
-    .drawer-box {
+    .drawer-main {
       right: 0%;
       box-shadow: 0 -3px 6px var(--shadow);
     }
     .drawer-blank {
       display: block;
-      background-color: rgba(0,0,0,.67);
+      background-color: rgba(0, 0, 0, 0.67);
     }
   }
 

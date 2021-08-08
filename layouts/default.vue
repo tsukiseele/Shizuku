@@ -24,7 +24,7 @@ export default {
   data: () => ({
     playlistId: 6760099512,
     musics: [],
-    windowWidth: 0,
+    windowWidth: 0
   }),
   computed: {
     background() {
@@ -41,7 +41,7 @@ export default {
     },
     live2dText() {
       return this.$store.state.live2dText;
-    },
+    }
   },
   watch: {
     live2dText(newVal) {
@@ -49,7 +49,7 @@ export default {
     },
     windowWidth(newVal) {
       this.$store.commit("clientWidth", newVal);
-    },
+    }
   },
   methods: {
     /**
@@ -65,7 +65,7 @@ export default {
               name: music.name,
               artist: music.ar[0].name,
               cover: music.al.picUrl,
-              url: `https://music.163.com/song/media/outer/url?id=${music.id}.mp3`,
+              url: `https://music.163.com/song/media/outer/url?id=${music.id}.mp3`
             });
           }
           return musics;
@@ -77,9 +77,8 @@ export default {
       /** 歌曲API列表 */
       // 文档参见：https://api.imjad.cn/cloudmusic.md
       const apis = [
-        
         `http://www.hjmin.com/playlist/detail?id=${this.playlistId}`,
-        `https://api.imjad.cn/cloudmusic/?type=playlist&id=${this.playlistId}`,
+        `https://api.imjad.cn/cloudmusic/?type=playlist&id=${this.playlistId}`
       ];
       for (const api of apis) {
         const result = await this.getMusicList(api);
@@ -99,7 +98,7 @@ export default {
       const scroll = this.$store.getters.scroll;
       this.$store.commit("scroll", {
         pos: newPos,
-        change: scroll && scroll.pos ? newPos - scroll.pos : 0,
+        change: scroll && scroll.pos ? newPos - scroll.pos : 0
       });
     },
     handleResize() {
@@ -113,7 +112,7 @@ export default {
       if (hour < 7 || hour > 18) {
         document.getElementsByTagName("html")[0].setAttribute("theme", "dark");
       }
-    },
+    }
   },
   beforeMount() {
     this.changeTheme();
@@ -128,7 +127,7 @@ export default {
   destroyed() {
     window.removeEventListener("scroll", this.handleScroll);
     window.removeEventListener("resize", this.handleResize);
-  },
+  }
 };
 </script>
 
@@ -136,6 +135,7 @@ export default {
 #app {
   position: relative;
   background: var(--background);
+  flex-direction: col;
 }
 #background {
   position: absolute;

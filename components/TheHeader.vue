@@ -8,32 +8,31 @@ header#header(ref="header", :class="{ full: isFull, hide: isHide }", :style="{ '
       span.subtitle--cursor(:class="{ 'subtitle--cursor-vague': input.vague }")
   .btn-scroll(v-show="!isHide")
     i.fa.fa-chevron-down.fa-lg(@click="scrollToContent()")
-</template>>
-
+</template>
 
 <script>
 export default {
   props: {
     title: {
       type: String,
-      default: "",
+      default: ""
     },
     subtitle: {
       type: String,
-      default: "",
+      default: ""
     },
     isHideSubtitle: {
       type: Boolean,
-      default: false,
+      default: false
     },
     isFull: {
       type: Boolean,
-      default: false,
+      default: false
     },
     isHide: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
   data: () => ({
     input: {
@@ -57,8 +56,8 @@ export default {
       show: "", // 当前行内容
       index: 0, // 行索引
       state: true,
-      vague: true,
-    },
+      vague: true
+    }
   }),
   methods: {
     scrollToContent() {
@@ -66,13 +65,13 @@ export default {
         const ele = document.getElementById("container");
         this.$store.commit("scroll", {
           pos: ele.offsetTop,
-          change: ele.offsetTop,
+          change: ele.offsetTop
         });
         ele.scrollIntoView();
       });
     },
     typing() {
-      var sleep = 0;
+      let sleep = 0;
       // 输入时，去除光标闪烁
       if (this.input.vague) this.input.vague = false;
       // 开始输入
@@ -113,11 +112,11 @@ export default {
       if (hitokoto) {
         this.input.template = [
           `${hitokoto.hitokoto}`,
-          `出自 ${hitokoto.from}`,
+          `出自 ${hitokoto.from}`
         ].concat(this.input.template);
       }
       this.typing();
-    },
+    }
   },
   computed: {
     clientHeight() {
@@ -144,10 +143,10 @@ export default {
     },
     scroll() {
       return this.$store.state.scroll;
-    },
+    }
   },
   watch: {
-    scroll() {},
+    scroll() {}
   },
   mounted() {
     if (!this.hideSubtitle) {
@@ -158,7 +157,7 @@ export default {
         this.getHitokoto();
       }
     }
-  },
+  }
 };
 </script>
 
@@ -182,47 +181,7 @@ export default {
   @media screen and(max-width: 768px) {
     height: 33vh;
   }
-  /*
-  &::before,
-  &::after {
-    content: "";
-    display: var(--hideTri);
-    position: absolute;
-    width: 200vw;
-    height: 200vh;
-    backdrop-filter: blur(16px);
-  }
-  &::before {
-    transform: rotateZ(30deg) translate(0, -70%);
-  }
-  &::after {
-    transform: rotateZ(30deg) translate(0, 70%);
-  }
-  @media screen and(max-width: 768px) {
-    &::before {
-      transform: rotateZ(30deg) translate(0%, -60%);
-    }
-    &::after {
-      transform: rotateZ(30deg) translate(0%, 60%);
-    }
-  }*/
 }
-
-/*
-.header-triangles {
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 100vw;
-  height: 100vh;
-  backdrop-filter: blur(10px);
-  &:nth-of-type(1) {
-    transform: rotateZ(30deg) translate(0%, 88%);
-  }
-  &:nth-of-type(2) {
-    transform: rotateZ(30deg) translate(0%, -88%);
-  }
-}*/
 
 .header--card {
   display: flex;
@@ -237,7 +196,6 @@ export default {
     font-size: 2.2rem;
     font-weight: 500;
     cursor: pointer;
-    color: var(--text-primary);
     span {
       transition: color 0.3s ease;
     }

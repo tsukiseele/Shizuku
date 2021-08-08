@@ -45,10 +45,11 @@ export default {
     // 侧栏
     asideStyles: {},
     asideClasses: {},
-    asidePos: null,
+    asidePos: null
   }),
   watch: {
     // 监听路由改变
+    /*
     $route: {
       handler(to, from) {
         // 仅客户端执行
@@ -76,12 +77,12 @@ export default {
       deep: true,
       // 路由改变后立即执行
       immediate: true,
-    },
+    },*/
     itemActive(newVal, oldVal) {
       if (newVal) {
         this.$store.commit("live2dText", `要阅读『${newVal} 』吗?`);
       }
-    },
+    }
   },
   computed: {
     scroll() {
@@ -95,7 +96,7 @@ export default {
       const placeholder = `${this.$static}/icon/akarin.png`;
       return {
         icon,
-        placeholder,
+        placeholder
       };
     },
     clientHeight() {
@@ -112,7 +113,7 @@ export default {
             : document.documentElement.clientHeight;
       }
       return clientHeight;
-    },
+    }
   },
 
   methods: {
@@ -126,7 +127,7 @@ export default {
         }
         this.articles.push.apply(this.articles, art);
       }
-    },
+    }
   },
   async asyncData({ app, params }) {
     let articles = [];
@@ -144,13 +145,13 @@ export default {
       page,
       articles,
       articleArch,
-      error,
+      error
     };
   },
   fetch() {
     this.$store.commit("header", { title: "雫『Shizuku』", isFull: true });
   },
-  mounted() {},
+  mounted() {}
 };
 </script>
 
@@ -184,7 +185,7 @@ export default {
 @media (max-width: 768px) {
   .aside-wrap {
     position: static;
-  align-self: stretch;
+    align-self: stretch;
   }
 
   #main {
@@ -256,4 +257,3 @@ export default {
   }
 }
 </style>
-
